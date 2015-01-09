@@ -7,4 +7,5 @@ Future support goals:
 - Adjustable bezier constant
 - support for canvas line joins
 - support for stroke options
+- text within the badge
 - a demo website
