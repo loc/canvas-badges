@@ -12,9 +12,36 @@ function badge(element, points, depth, color) {
     
     element.appendChild(canvas);
 
+    
+
     var context = canvas.getContext('2d'),
-        size = Math.min(canvas.width, canvas.height),
-        diff = canvas.width * (depth / 100),
+        devicePixelRatio = window.devicePixelRatio || 1,
+        backingStoreRatio = context.webkitBackingStorePixelRatio ||
+                context.mozBackingStorePixelRatio ||
+                context.msBackingStorePixelRatio ||
+                context.oBackingStorePixelRatio ||
+                context.backingStorePixelRatio || 1,
+        ratio = devicePixelRatio / backingStoreRatio;
+
+    if (devicePixelRatio !== backingStoreRatio) {
+
+        var oldWidth = canvas.width;
+        var oldHeight = canvas.height;
+
+        canvas.width = oldWidth * ratio;
+        canvas.height = oldHeight * ratio;
+
+        canvas.style.width = oldWidth + 'px';
+        canvas.style.height = oldHeight + 'px';
+
+        // now scale the context to counter
+        // the fact that we've manually scaled
+        // our canvas element
+        context.scale(ratio, ratio);
+    }
+
+    var size = Math.min(canvas.width/ratio, canvas.height/ratio),
+        diff = canvas.width * (depth / ratio / 100),
         w = size - (diff * 2),
         h = size - (diff * 2),
         cx = size/2,
